@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎄 Merry Christmas</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{
+  height:100vh;
+  background:radial-gradient(circle at top,#7b0000,#2b0000);
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+}
+
+/* ===== SNOW ===== */
+.snow{
+  position:fixed;
+  top:-10px;
+  animation-name:fall;
+  animation-timing-function:linear;
+  user-select:none;
+}
+@keyframes fall{
+  to{transform:translateY(110vh)}
+}
+
+/* ===== ENVELOPE ===== */
+#envelope{
+  width:280px;
+  height:180px;
+  background:#c0392b;
+  border-radius:10px;
+  position:relative;
+  cursor:pointer;
+  z-index:10;
+  box-shadow:0 20px 40px rgba(0,0,0,.5);
+  transition:.6s;
+}
+#envelope.hide{
+  transform:scale(0);
+  opacity:0;
+}
+.flap{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:50%;
+  background:#e74c3c;
+  clip-path:polygon(0 0,50% 100%,100% 0);
+  transform-origin:top;
+  transition:.6s;
+}
+#envelope.open .flap{transform:rotateX(180deg)}
+
+.hint{
+  position:absolute;
+  top:-40px;
+  width:100%;
+  text-align:center;
+  font-size:14px;
+  animation:blink 1.5s infinite;
+}
+@keyframes blink{
+  0%,100%{opacity:.4}
+  50%{opacity:1}
+}
+
+/* ===== LETTER ===== */
+#letter{
+  position:absolute;
+  width:300px;
+  padding:25px;
+  background:#fff7e6;
+  color:#333;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 25px 60px rgba(0,0,0,.6);
+  transform:translateY(30px) scale(.9);
+  opacity:0;
+  z-index:5;
+  pointer-events:none;
+  transition:.8s;
+}
+#letter.show{
+  opacity:1;
+  transform:translateY(-80px) scale(1);
+}
+#letter h2{color:#c0392b;margin-bottom:10px}
+#letter .sign{margin-top:20px;font-style:italic}
+
+/* ===== WAIT ===== */
+#wait{
+  position:absolute;
+  opacity:0;
+  transition:.6s;
+}
+#wait.show{opacity:1}
+
+/* ===== FINAL IMAGE ULTIMATE ===== */
+#finalImg{
+  position:absolute;
+  opacity:0;
+  transform:scale(.6);
+  transition:1s ease;
+  text-align:center;
+}
+#finalImg.show{
+  opacity:1;
+  transform:scale(1);
+}
+#finalImg img{
+  width:260px;
+  border-radius:22px;
+  box-shadow:
+    0 0 30px rgba(255,180,180,.6),
+    0 0 80px rgba(255,120,120,.4);
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+.glow{
+  position:absolute;
+  inset:-20px;
+  background:radial-gradient(circle,rgba(255,200,200,.6),transparent 70%);
+  filter:blur(25px);
+  z-index:-1;
+  animation:pulse 3s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:.4}
+  50%{opacity:.9}
+}
+.caption{
+  margin-top:14px;
+  font-size:15px;
+  color:#ffecec;
+  letter-spacing:1px;
+  animation:fadeUp 1.5s ease;
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+
+<div id="envelope">
+  <div class="hint">👆 Nhấn để mở phong bì</div>
+  <div class="flap"></div>
+</div>
+
+<div id="letter">
+  <h2>🎅 Merry Christmas 🎅</h2>
+  <p>Chúc em 1 giáng sinh an lành<br>ngập tràn niềm vui và hạnh phúc 🎄</p>
+  <div class="sign">— Hiểu đẹp trai —</div>
+</div>
+
+<div id="wait">⏳ Vui lòng đợi vài giây...</div>
+
+<div id="finalImg">
+  <div class="glow"></div>
+  <img src="final.jpg">
+  <div class="caption">From Hiểu đẹp trai 🎄</div>
+</div>
+
+<script>
+/* ===== SNOW DEPTH ===== */
+function snow(layer,count,sizeMin,sizeMax,speedMin,speedMax,opacity){
+  for(let i=0;i<count;i++){
+    let s=document.createElement('div');
+    s.className='snow';
+    s.innerHTML='❄';
+    s.style.left=Math.random()*100+'vw';
+    s.style.fontSize=Math.random()*(sizeMax-sizeMin)+sizeMin+'px';
+    s.style.animationDuration=Math.random()*(speedMax-speedMin)+speedMin+'s';
+    s.style.opacity=opacity;
+    s.style.zIndex=layer;
+    document.body.appendChild(s);
+  }
+}
+snow(1,20,6,10,12,18,.3);
+snow(2,30,10,14,8,12,.6);
+snow(3,25,14,20,5,8,.9);
+
+/* ===== TIMELINE ===== */
+const env=document.getElementById('envelope');
+const letter=document.getElementById('letter');
+const wait=document.getElementById('wait');
+const finalImg=document.getElementById('finalImg');
+const music=document.getElementById('music');
+
+env.onclick=()=>{
+  env.classList.add('open');
+  music.play();
+
+  setTimeout(()=>{
+    env.classList.add('hide');
+    letter.classList.add('show');
+  },600);
+
+  setTimeout(()=>{
+    letter.classList.remove('show');
+    wait.classList.add('show');
+  },5200);
+
+  setTimeout(()=>{
+    wait.classList.remove('show');
+    finalImg.classList.add('show');
+  },7800);
+};
+
+/* ===== GLOW FOLLOW MUSIC ===== */
+music.onplay=()=>{
+  setInterval(()=>{
+    document.querySelector('.glow').style.opacity=
+      0.4+Math.random()*0.6;
+  },400);
+};
+</script>
+
+</body>
+</html>
